@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Carousel, Col, Row } from 'antd';
+import { Carousel, Col } from 'antd';
 import Header from '../../../components/Header';
 import '../../../css/responsive.css'
 
@@ -9,10 +9,12 @@ import '../../../css/cssAntd.css'
 import '../../../css/Home/home.css'
 import Product from './Product';
 import Footer from '../../../components/Footer';
+// @ts-ignore
 import Carousel1, { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 const Home = () => {
   const slider = useRef<any>(null);
+  // @ts-ignore
   const onChange = (currentSlide: any) => {
     // console.log(currentSlide);
   };
@@ -73,7 +75,7 @@ const Home = () => {
           </div>
           <div className='categori-list'>
             <Carousel1
-            id='1'
+              id='1'
               animationSpeed={1000}
               plugins={[
                 'infinite',

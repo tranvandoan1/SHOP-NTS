@@ -1,4 +1,5 @@
 import styles from '../css/Home/home.module.css'
+// @ts-ignore
 import React, { useEffect } from 'react'
 import { Input, Badge, } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
@@ -6,17 +7,7 @@ const { Search } = Input;
 const Header: React.FC = () => {
 
     const onSearch = (value: any) => console.log(value);
-    useEffect(() => {
-        const sticky = document.querySelectorAll("#navbar").offsetTop;
-        console.log(sticky,'sticky')
-        if (sticky) {
-            window.onscroll = async function () {
-                window.pageYOffset >= sticky
-                    ? document.querySelectorAll("#navbar").classList.add("sticky")
-                    : document.querySelectorAll("#navbar").classList.remove("sticky");
-            };
-        }
-    }, []);
+
     return (
         <div className={styles.header}>
             <div className='header-content' id="navbar">

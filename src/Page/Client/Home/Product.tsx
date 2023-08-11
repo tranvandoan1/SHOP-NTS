@@ -1,7 +1,9 @@
 import styles from "../../../css/Home/product.module.css";
+// @ts-ignore
 import Carousel, { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
 import { Col, Row } from "antd";
+// @ts-ignore
 import React from 'react'
 const Product = () => {
 
@@ -122,7 +124,7 @@ const Product = () => {
                     <div className={styles["show-product"]}>
                         <Row gutter={16}>
 
-                            {data.map((item: any, index: any) => {
+                            {data.map((item: any) => {
                                 return (
                                     <Col xs={12} sm={8} md={6} lg={4} xl={6}>
                                         <div
