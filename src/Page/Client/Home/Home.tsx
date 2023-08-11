@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Input, Space, Carousel } from 'antd';
+import { Carousel } from 'antd';
 import Header from '../../../components/Header';
 import '../../../css/responsive.css'
 
@@ -10,16 +10,9 @@ import '../../../css/Home/home.css'
 import Product from './Product';
 import Footer from '../../../components/Footer';
 
-const contentStyle = {
-  margin: 0,
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
-};
+
 const Home = () => {
-  const slider = useRef(null);
+  const slider = useRef<any>(null);
   const onChange = (currentSlide: any) => {
     console.log(currentSlide);
   };

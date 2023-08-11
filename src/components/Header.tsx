@@ -1,6 +1,6 @@
 import styles from '../css/Home/home.module.css'
-import React, { useState } from 'react'
-import { Input, Badge, Carousel } from 'antd';
+import React, {  } from 'react'
+import { Input, Badge, } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const Header: React.FC = () => {

@@ -1,9 +1,7 @@
-import React from 'react'
 import styles from '../../../css/Home/product.module.css'
 
-type Props = {}
 
-const Product = (props: Props) => {
+const Product = () => {
     return (
         <div className={styles.list_products}>
             <h3>Sản phẩm nổi bật</h3>
