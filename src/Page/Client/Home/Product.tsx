@@ -1,10 +1,10 @@
 import styles from "../../../css/Home/product.module.css";
 // @ts-ignore
 import Carousel, { slidesToShowPlugin, autoplayPlugin } from "@brainhubeu/react-carousel";
-import "@brainhubeu/react-carousel/lib/style.css";
 import { Col, Row } from "antd";
 // @ts-ignore
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 const Product = () => {
 
     const data = [
@@ -65,6 +65,7 @@ const Product = () => {
             sale: 10,
         },
     ];
+    const nativer=useNavigate()
     return (
         <div>
             <div className={styles.list_products}>
@@ -72,7 +73,6 @@ const Product = () => {
                 <div className="css-library">
                     <div className={styles["show-product"]}>
                         <Carousel
-                            id='2'
                             animationSpeed={2000}
                             plugins={[
                                 'infinite',
@@ -93,11 +93,11 @@ const Product = () => {
 
 
                         >
-                            {data.map((item: any, index: any) => {
+                            {data.map((item: any) => {
                                 return (
                                     <div
                                         className={styles["products"]}
-                                        style={{ marginLeft: index == 0 ? 0 : 10 }}
+                                        style={{ marginLeft: 10 }}
                                     >
                                         <div className={styles["product-photo"]}>
                                             <img src={item.image} alt="" />
@@ -129,6 +129,7 @@ const Product = () => {
                                     <Col xs={12} sm={8} md={6} lg={4} xl={6}>
                                         <div
                                             className={styles["products"]}
+                                            onClick={()=>nativer('/detail')}
                                         >
                                             <div className={styles["product-photo"]}>
                                                 <img src={item.image} alt="" />

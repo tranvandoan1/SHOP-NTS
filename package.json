@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.5",
     "@brainhubeu/react-carousel": "^2.0.4",
+    "@types/brainhubeu__react-carousel": "^2.0.5",
     "antd": "^5.8.2",
     "axios": "^1.4.0",
     "firebase": "^10.1.0",

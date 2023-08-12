@@ -23,6 +23,22 @@
     margin: 0 auto;
 }
 
+.logo {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 350ms ease-in 0s;
+}
+
+.logo img {
+    position: absolute;
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}
+
 .slide-image div {
     height: 460px;
     position: relative;

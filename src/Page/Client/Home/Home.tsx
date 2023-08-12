@@ -2,9 +2,7 @@ import { useRef } from 'react'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { Carousel, Col } from 'antd';
 import Header from '../../../components/Header';
-import '../../../css/responsive.css'
 
-import '../../../css/cssAntd.css'
 
 import '../../../css/Home/home.css'
 import Product from './Product';
@@ -48,20 +46,7 @@ const Home = () => {
             </div>
 
           </Carousel>
-          {/* <Carousel>
-                <div>
-                    <img src="assets/1.jpeg" />
-                    <p className="legend">Legend 1</p>
-                </div>
-                <div>
-                    <img src="assets/2.jpeg" />
-                    <p className="legend">Legend 2</p>
-                </div>
-                <div>
-                    <img src="assets/3.jpeg" />
-                    <p className="legend">Legend 3</p>
-                </div>
-            </Carousel> */}
+         
           <LeftOutlined className='slider-button_left' onClick={() => slider.current.prev()} />
 
           <RightOutlined className='slider-button_right' onClick={() => slider.current.next()}
@@ -75,7 +60,6 @@ const Home = () => {
           </div>
           <div className='categori-list'>
             <Carousel1
-              id='1'
               animationSpeed={1000}
               plugins={[
                 'infinite',
