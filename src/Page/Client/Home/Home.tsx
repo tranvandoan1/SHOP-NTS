@@ -27,8 +27,7 @@ const Home = () => {
     { id: 4, name: 'rèm cửa', photo: 'https://mancuathaituan.com/wp-content/uploads/2019/10/rem-cua-quan-go-vap-dep-1.jpg' },
   ]
   return (
-    <div>
-
+    <div style={{background:'#fff'}}>
       <Header />
       <div className='body'>
         <div className='slider'>
