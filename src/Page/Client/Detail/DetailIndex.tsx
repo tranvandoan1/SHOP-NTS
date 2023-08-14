@@ -6,11 +6,13 @@ import "@brainhubeu/react-carousel/lib/style.css";
 import "./detail.css";
 import Carousel, { slidesToShowPlugin } from "@brainhubeu/react-carousel";
 import "@brainhubeu/react-carousel/lib/style.css";
-import { Button, Col, Input,  Rate, Row } from "antd";
+import { Button, Col, Input, Rate, Row } from "antd";
 import { BsCartPlus } from "react-icons/bs";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Footer from "../../../components/Footer";
 import Comment from "./Comment";
+import { useEffect } from 'react';
+import Comfim from "../../../components/Comfim";
 type Props = {};
 // @ts-ignore
 type State = {
@@ -105,10 +107,16 @@ const data = [
 // @ts-ignore
 const DetailIndex = (props: Props) => {
   const [valueImage, setValueImage] = useState(image[0]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // @ts-ignore
 
   // @ts-ignore
   const onchange = (value: any) => { };
+  useEffect(() => {
+    window.scroll(0, 0);
+
+  }, [])
   return (
     <div className="detail">
       <Header />
@@ -250,7 +258,7 @@ const DetailIndex = (props: Props) => {
                 <button className="button-add-pro">
                   <BsCartPlus /> <span>Thêm sản phẩm</span>
                 </button>
-                <button className="button-add-buy">Mua ngay</button>
+                <button className="button-add-buy" onClick={()=>setIsModalOpen(true)}>Mua ngay</button>
               </div>
             </div>
           </div>
@@ -360,6 +368,14 @@ const DetailIndex = (props: Props) => {
 
 
       </div>
+      <Comfim
+        title="Xóa bình luận"
+        conent="Bạn có muốn xóa bình luận này không ?"
+        btnComfim={() => setIsModalOpen(false)}
+        btnReject={() => setIsModalOpen(false)}
+        data=''
+        isModalOpen={isModalOpen}
+      />
       <Footer />
     </div>
   );

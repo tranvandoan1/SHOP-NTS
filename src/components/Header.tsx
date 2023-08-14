@@ -3,7 +3,6 @@ import styles from "../css/Home/home.module.css";
 import React, { useEffect, useState } from "react";
 import { Input, Badge, Drawer } from "antd";
 import {
-    UserOutlined,
     ShoppingCartOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -22,7 +21,7 @@ const Header: React.FC = () => {
             <Badge count={5}>
                 <ShoppingCartOutlined className={styles.icon} />
             </Badge>
-            <UserOutlined className={styles.icon} />
+            <span className={styles['btn-login']} onClick={()=>navigater('/login')}>Đăng nhập</span>
         </div>
     );
 
@@ -31,7 +30,7 @@ const Header: React.FC = () => {
             <div className="header-content" id="navbar">
                 <div className={"logo"} onClick={() => navigater("/")}>
                     <img
-                        src="https://firebasestorage.googleapis.com/v0/b/order-94f58.appspot.com/o/images%2FSHOP-NTS%20(2).png?alt=media&token=7aa8ec58-398f-4ec0-96bc-577f6f5d5ca8"
+                        src="https://firebasestorage.googleapis.com/v0/b/order-94f58.appspot.com/o/images%2FSHOP.png?alt=media&token=b1524eb8-9ca4-4e3d-b90c-7abb227345ae"
                         alt=""
                     />
                 </div>

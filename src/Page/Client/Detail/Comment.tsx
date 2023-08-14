@@ -1,11 +1,14 @@
 import "./comment.css";
 import { Avatar, Input, Pagination } from 'antd';
 import { CameraOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import EditComment from "../../../components/EditComment";
+import { useState } from "react";
 const { TextArea } = Input;
 type Props = {}
 
 // @ts-ignore
 const Comment = (props: Props) => {
+    const [isModalOpenEditComment, setIsModalOpenEditComment] = useState(false);
     function getTimeAgo(commentTime: any) {
         // Lấy thời gian hiện tại
         const now: any = new Date();
@@ -64,7 +67,7 @@ const Comment = (props: Props) => {
                             <span>tranvandoan</span>-<span>{timeAgo}</span>
                         </div>
                         <div>
-                            <EditOutlined className='list-comment-user-edit' />
+                            <EditOutlined className='list-comment-user-edit' onClick={() => setIsModalOpenEditComment(true)} />
                             <DeleteOutlined className='list-comment-user-delete' />
                         </div>
                     </div>
@@ -123,11 +126,18 @@ const Comment = (props: Props) => {
                     </div>
                 </div>
                 <div className='comment-pagination'>
-
                     <Pagination defaultCurrent={1} total={50} />
                 </div>
 
             </div>
+            <EditComment
+                title="Sửa bình luận"
+                conent="Xóa sản phẩm"
+                btnComfim={() => setIsModalOpenEditComment(false)}
+                btnReject={() => setIsModalOpenEditComment(false)}
+                data=''
+                isModalOpen={isModalOpenEditComment}
+            />
         </div>
     )
 }

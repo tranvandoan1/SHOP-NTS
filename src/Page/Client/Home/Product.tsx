@@ -65,7 +65,7 @@ const Product = () => {
             sale: 10,
         },
     ];
-    const nativer=useNavigate()
+    const nativer = useNavigate()
     return (
         <div>
             <div className={styles.list_products}>
@@ -129,7 +129,7 @@ const Product = () => {
                                     <Col xs={12} sm={8} md={6} lg={4} xl={6}>
                                         <div
                                             className={styles["products"]}
-                                            onClick={()=>nativer('/detail')}
+                                            onClick={() => nativer('/detail')}
                                         >
                                             <div className={styles["product-photo"]}>
                                                 <img src={item.image} alt="" />
