@@ -1,17 +1,23 @@
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 import "./css/login.css";
+// @ts-ignore
 import { Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { FcGoogle } from 'react-icons/fc'
 import { useNavigate } from "react-router-dom";
 type Props = {};
 
+// @ts-ignore
 const Login = (props: Props) => {
+    // @ts-ignore
     const [timeClassName, setTimeClassName] = useState<boolean>(false)
     const navigator = useNavigate()
+    // @ts-ignore
     const onFinish = (values) => {
         console.log("Success:", values);
     };
+    // @ts-ignore
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
     };

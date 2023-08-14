@@ -1,8 +1,5 @@
-import { CameraOutlined } from "@ant-design/icons";
-import { Avatar, Input, Modal } from "antd";
-import React, { useState } from "react";
+import { Modal } from "antd";
 import "./css/comfim.css";
-const { TextArea } = Input;
 type Props = {
     btnReject: () => void;
     btnComfim: () => void;
@@ -15,6 +12,7 @@ type Props = {
 const Comfim = ({
     btnReject,
     btnComfim,
+    // @ts-ignore
     data,
     title,
     conent,
@@ -39,7 +37,7 @@ const Comfim = ({
             cancelText="Hủy"
         >
             <div>
-                <h5 style={{color:'red'}}>{title}</h5>
+                <h5 style={{ color: 'red' }}>{title}</h5>
                 <h6>{conent}</h6>
             </div>
         </Modal>

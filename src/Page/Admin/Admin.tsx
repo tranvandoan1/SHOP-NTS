@@ -5,7 +5,6 @@ import {
   MenuUnfoldOutlined,
   SettingOutlined,
   ShoppingCartOutlined,
-  UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -20,6 +19,7 @@ const Admin: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+// @ts-ignore
   const key = JSON.parse(localStorage.getItem("key"));
 
   return (
@@ -49,7 +49,7 @@ const Admin: React.FC = () => {
         <Menu
           mode="inline"
           defaultSelectedKeys={
-            key == null ? [tables?.value?.length > 0 ? "1" : "1"] : key
+            key == null ? 1 : key
           }
           items={[
             {

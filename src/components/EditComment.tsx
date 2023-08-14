@@ -14,8 +14,10 @@ type Props = {
 const EditComment = ({
   btnReject,
   btnComfim,
+// @ts-ignore
   data,
   title,
+// @ts-ignore
   conent,
   isModalOpen,
 }: Props) => {

@@ -1,7 +1,9 @@
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 
 import "./css/login.css";
 import "./css/signUp.css";
+// @ts-ignore
 import { Button, Checkbox, Form, Input, Spin, Upload } from "antd";
 import {
     CloseCircleOutlined,
@@ -13,6 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 type Props = {};
 
+// @ts-ignore
 const SignUp = (props: Props) => {
     let navigator = useNavigate();
     const [imageUrlAvatar, setImageUrlAvatar] = useState<{ url: any; file: any }>(

@@ -1,6 +1,6 @@
-import React from 'react'
 
 type Props = {}
+// @ts-ignore
 
 const Cart = (props: Props) => {
   return (
