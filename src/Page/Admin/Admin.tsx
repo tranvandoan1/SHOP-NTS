@@ -9,19 +9,29 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme, Avatar } from "antd";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./css/admin.css";
 import { FaProductHunt } from "react-icons/fa";
+import Comfim from "../../components/Comfim";
 const { Header, Sider, Content } = Layout;
 
 const Admin: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const navigator = useNavigate()
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [logoutComfim, setLogouComfim] = useState<boolean>(false)
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-// @ts-ignore
+  // @ts-ignore
   const key = JSON.parse(localStorage.getItem("key"));
-
+  const userLoca = JSON.parse(localStorage.getItem('user'))
+  const logout = () => {
+    
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('key')
+    navigator('/login')
+  }
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -41,7 +51,7 @@ const Admin: React.FC = () => {
             }}
           >
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/order-94f58.appspot.com/o/images%2FSHOP%20(1).png?alt=media&token=aa1fc61d-956d-4f7f-8f07-d07f7b50bb94"
+              src="https://firebasestorage.googleapis.com/v0/b/hieshop-df804.appspot.com/o/images%2Flogo.png?alt=media&token=9836e096-bfcf-46dd-b8a2-c5616bfa21ed"
               alt=""
             />
           </div>
@@ -122,11 +132,11 @@ const Admin: React.FC = () => {
               key: "7",
               icon: <LoginOutlined />,
               label: "Đăng xuất",
-              itemIcon: <NavLink to="login" />,
+              itemIcon:null,
               style: { color: "black" },
               onClick: () => {
-                localStorage.removeItem("key");
-                localStorage.setItem("key", JSON.stringify(["1"]));
+                setLogouComfim(true)
+              
               },
             },
           ]}
@@ -155,16 +165,17 @@ const Admin: React.FC = () => {
             }}
           />
           <div style={{ paddingRight: 30 }}>
-            <Avatar size={34} icon={<UserOutlined />} />
+            <Avatar size={34} src={userLoca.avatar}
+            />
             <span
               style={{
-                fontSize: 18,
+                fontSize: 17,
                 fontWeight: "600",
                 color: "red",
                 marginLeft: 10,
               }}
             >
-              tranvandoan
+              {userLoca.name}
             </span>
           </div>
         </Header>
@@ -172,13 +183,23 @@ const Admin: React.FC = () => {
           style={{
             margin: "14px 0  0 14px",
             padding: 24,
-            minHeight: 280,
+            height: 280,
             background: colorBgContainer,
+            overflow:'auto'
           }}
         >
           <Outlet />
         </Content>
       </Layout>
+      <Comfim
+        title="Đăng xuất"
+        conent="Bạn có muốn đăng xuất không ?"
+        okText="Đăng xuất"
+        cancelText="Không"
+        btnComfim={()=>logout()}
+        btnReject={()=>setLogouComfim(false)}
+        isModalOpen={logoutComfim}
+      />
     </Layout>
   );
 };

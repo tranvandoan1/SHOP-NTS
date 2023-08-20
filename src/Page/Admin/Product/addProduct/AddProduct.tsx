@@ -1,324 +1,339 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Descriptions, Space, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import './product.css'
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  CloseCircleOutlined,
+  PlusCircleOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Spin,
+  Upload,
+  message,
+} from "antd";
+import React, { useState, startTransition, useEffect } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { useDispatch, useSelector } from "react-redux";
 // @ts-ignore
-import { getProductAll } from '../../../features/Products'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { getCateAll } from "./../../../../features/CateSlice";
+import ProInfo from './ProInfo';
 // @ts-ignore
-import { getCateAll } from './../../../features/CateSlice';
-// @ts-ignore
-import { getAllClassifies } from './../../../features/Classifies';
-interface DataType {
-  key: React.Key;
-  name: string;
-  age: number;
-  address: string;
-}
-
-
-const Products: React.FC = () => {
-  const dispatch = useDispatch()
-  const navigater = useNavigate()
-  const products = useSelector((data: any) => data.products)
-
-  const categories = useSelector((data: any) => data.categories);
-  const classifies = useSelector((data: any) => data.classifies);
-  const [dataDeletePro, setDataDeletePro] = useState();
-  const categoriesValue = categories?.value?.data
-  console.log(classifies, 'classifies')
-
-  const dataProducts = products?.value?.data?.map((item: any) => {
-    return { ...item, key: item?._id };
-  });
-  const dataProducts1: any = []
-  // products?.value?.data?.map((item: any) => {
-  //   classifies?.value?.map((itemClas: any) => {
-  //     if (item.linked == itemClas.linked) {
-  //       dataProducts1.push({ ...item, key: item?._id,values:[itemClas.values] })
-  //     }
-  //   })
-  // });
-  console.log(dataProducts1, 'dataProducts1')
+const AddProduct: React.FC = ({ callBack, state, data }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [p1, setP1] = useState(1);
+  const categories = useSelector((data: any) => data.categories.value);
   useEffect(() => {
-    dispatch(getProductAll())
     dispatch(getCateAll());
-    dispatch(getAllClassifies());
-  }, [])
-  const [textPro, setTextPro] = useState({ status: false, id: null });
-
-
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
-      render: (text: string) => <span>{text}</span>,
-    },
-    {
-      title: 'Danh mục',
-      dataIndex: 'cate_id',
-      // @ts-ignore
-      render: (cate_id: any) => {
-        categoriesValue?.map((item: any) => {
-          if (item._id == cate_id) {
-            return <span style={{ fontSize: 18 }}>{item.name}</span>
-          }
-        })
-      },
-
-    },
-    {
-      title: "Ảnh",
-      key: "photo",
-      dataIndex: "photo",
-      render: (photo) => (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-          <div className={"categori-logo"}>
-            <img src={photo} alt="" />
-          </div>
-        </div>
-
-      ),
-    },
-    {
-      title: 'Giảm giá',
-      dataIndex: 'sale',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-    },
-    {
-      title: "Thao tác",
-      key: "data._id",
-      render: (_id) => (
-        <div>
-          <Space size="middle" style={{ marginRight: 10, cursor: 'pointer' }} >
-            <EditOutlined />
-          </Space>
-          <Space size="middle" style={{ cursor: 'pointer' }}>
-            <a>
-              <DeleteOutlined />
-            </a>
-          </Space>
-        </div>
-      ),
-    },
-  ];
-
-  // rowSelection object indicates the need for row selection
-  const rowSelection = {
-    onChange: (selectedRowKeys: any) => {
-      setTextPro({ status: false, id: null });
-      setDataDeletePro(selectedRowKeys);
-    },
+  }, []);
+  const [imageUrlAvatar, setImageUrlAvatar] = useState<any>({
+    url: undefined,
+    file: undefined,
+  });
+  const UploadAvatatr = (file: any) => {
+    setLoading(true);
+    const src = URL.createObjectURL(file);
+    setImageUrlAvatar({ url: src, file: file });
+    setLoading(false);
   };
-  const handleExpand = (expanded: any) => {
-    if (expanded) {
-      setTextPro(
-        { status: false, id: null }
-      )
+  const [content, setContent] = useState("");
+  const [dataValue, setDataValue] = useState<any>();
+  console.log(dataValue, 'dataValue')
+  const onFinish = (values: any) => {
+    if (imageUrlAvatar.file == undefined) {
+      message.warning('Chưa chọn ảnh !')
     } else {
-      setTextPro(
-        { status: false, id: null }
-      )
+      const newData = {
+        ...values,
+        description: content,
+        imageUrlAvatar: imageUrlAvatar
+
+      }
+      setDataValue(newData)
+      setP1(2)
     }
-  }
+
+  };
+  const onFinishFailed = (values: any) => { console.log(values, '21wed') };
+
   return (
-    <div>
-      <div className='admin-product'>
-        <h4>Sản phẩm</h4>
-        <Button onClick={() => navigater('add')}>Thêm sản phẩm</Button>
-      </div>
-      <hr />
-
-      <div className='admin-product-table'>
-
-        <Table
-          rowSelection={{
-            type: 'checkbox',
-            ...rowSelection,
-          }}
-          expandable={{
-            expandedRowRender: (record: any) => {
-              return (
-                // @ts-ignore
-                <div key={record} className={"table-product"}>
-                  <Descriptions>
-                    {categoriesValue?.map((item: any) => {
-                      if (item._id == record.cate_id) {
-                        return (
-                          <Descriptions.Item
-                            label={
-                              <span style={{ fontSize: 15 }}>Danh mục</span>
-                            }
-                          >
-                            <p
-                              style={{
-                                margin: 0,
-                                fontSize: 14,
-                              }}
-                            >
-                              {item.name}
-                            </p>
-                          </Descriptions.Item>
-                        );
-                      }
-                    })}
-
-                    {record?.view && (
-                      <Descriptions.Item
-                        label={<span style={{ fontSize: 15 }}>Lượt xem</span>}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.view}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                    {record?.name_classification && (
-                      <Descriptions.Item
-                        label={
-                          <span style={{ fontSize: 15 }}>Tên phân loại</span>
-                        }
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.name_classification}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                    {record?.name_commodityvalue && (
-                      <Descriptions.Item
-                        label={
-                          <span style={{ fontSize: 15 }}>
-                            {<span style={{ fontSize: 15 }}>Lượt xem</span>}
-                          </span>
-                        }
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.name_commodityvalue}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                    {record?.linked && (
-                      <Descriptions.Item
-                        label={<span style={{ fontSize: 15 }}>Kho hàng</span>}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.warehouse}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                    {record?.origin && (
-                      <Descriptions.Item
-                        label={<span style={{ fontSize: 15 }}>Nguồn gốc</span>}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.origin}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-
-                    {record?.sent_from && (
-                      <Descriptions.Item
-                        label={<span style={{ fontSize: 15 }}>Gửi từ</span>}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.sent_from}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                    {record?.trademark && (
-                      <Descriptions.Item
-                        label={<span style={{ fontSize: 15 }}>Nhãn hiệu</span>}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                          }}
-                        >
-                          {record?.trademark}
-                        </p>
-                      </Descriptions.Item>
-                    )}
-                  </Descriptions>
-                  <div className={"pro-detail"}>
-                    <p style={{ fontSize: 15 }}>Chi tiết sản phẩm</p>
-                    <p
-                      style={{ width: "100%", fontSize: 14 }}
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          textPro.id == record._id
-                            ?
-                            record?.description
-                            : record?.description.substring(
-                              0,
-                              String(record?.description).length /
-                              10
-                            ) + "...",
-                      }}
-                    />
-                    <Button
-                      type="primary"
-                      onClick={() =>
-                        setTextPro(
-                          textPro.id == record._id
-                            ? { status: false, id: null }
-                            : { status: true, id: record._id }
-                        )
-                      }
+    <div style={{ background: "#fff" }}>
+      {
+        p1 == 1 ?
+          <React.Fragment>
+            <div style={{ paddingTop: 30 }}>
+              <Row>
+                <Col
+                  xs={12}
+                  sm={4}
+                  md={12}
+                  lg={4}
+                  xl={4}
+                  style={{ textAlign: "left", padding: "0 30px" }}
+                >
+                  <span className={"image_title"}>Ảnh bìa</span>
+                </Col>
+                <Col xs={12} sm={4} md={12} lg={20} xl={20}>
+                  <div className={"uploadImage"} style={{ marginLeft: 12 }}>
+                    <Upload
+                      listType="picture-card"
+                      showUploadList={false}
+                      beforeUpload={UploadAvatatr}
                     >
-                      {textPro.id !== record._id ? "Xem thêm" : "Rút gọn"}
-                    </Button>
+                      {imageUrlAvatar.file !== undefined ? (
+                        <div
+                          className="box-image"
+                        >
+                          <img
+                            src={
+                              dataValue?.imageUrlAvatar?.file == undefined ?
+                                imageUrlAvatar
+                                  ? imageUrlAvatar.url
+                                  : state?.dataBasicInfo?.photo.url !== "" &&
+                                  state?.dataBasicInfo?.photo.url
+                                :
+                                dataValue?.imageUrlAvatar?.url
+                            }
+                            className="image"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <div
+                            style={{
+                              marginTop: 8,
+                            }}
+                          >
+                            {loading == true ? (
+                              <Spin />
+                            ) : (
+                              <PlusCircleOutlined
+                                style={{
+                                  fontSize: 30,
+                                  opacity: 0.8,
+                                  color: "#ee4d2d",
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </Upload>
+                    {imageUrlAvatar.file !== undefined && (
+                      <div
+                        className={"close"}
+                        onClick={() => (
+                          setImageUrlAvatar({ url: undefined, file: undefined }),
+                          callBack({
+                            data: { ...state?.dataBasicInfo, photo: "" },
+                            check: 1,
+                          })
+                        )}
+                      >
+                        <CloseCircleOutlined style={{ fontSize: 17 }} />
+                      </div>
+                    )}
                   </div>
-                </div>
-              );
-            },
+                </Col>
+              </Row>
+            </div>
 
-            onExpand: handleExpand,//ấn hiện chi tiết
-          }}
-          columns={columns}
-          dataSource={dataProducts}
-        />
-      </div>
+            <div style={{ marginTop: 20, padding: "20px" }}>
+              <Form
+                name="basic"
+                labelCol={{
+                  span: 4,
+                }}
+                wrapperCol={{
+                  span: 20,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="Tên sản phẩm"
+                  name="name"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required: (String(dataValue?.name)?.length <= 0 || dataValue?.name == undefined) ? true : false,
+                  //     message: "Bạn chưa nhập tên sản phẩm!",
+                  //   },
+                  // ]}
+                >
+                  <Input placeholder="Tên sản phẩm" defaultValue={(String(dataValue?.name)?.length <= 0 || dataValue?.name == undefined) ? "" : dataValue?.name} />
+                </Form.Item>
+                <Form.Item
+                  label="Mô tả"
+                  labelAlign="left"
+                  name="description"
+                  // rules={[
+                  //   {
+                  //     required: (String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? true : false,
+                  //     message: "Bạn chưa nhập mô tả!",
+                  //   },
+                  // ]}
+                >
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={(String(dataValue?.description)?.length <= 0 || dataValue?.description == undefined) ? "" : dataValue?.description}
+                    // @ts-ignore
+                    onChange={(event: any, editor: any) => {
+                      const data = editor.getData();
+                      startTransition(() => {
+                        setContent(data);
+                      });
+                    }}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Giảm giá"
+                  name="sale"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required: (String(dataValue?.sale)?.length <= 0 || dataValue?.sale == undefined) ? true : false,
+                  //     message: "Bạn chưa nhập giảm giá!",
+                  //   },
+                  // ]}
+                  style={{ marginTop: 80 }}
+                >
+                  <Input
+                    placeholder="Giảm giá"
+                    type="number"
+                    max={100}
+                    min={0}
+                    defaultValue={(String(dataValue?.sale)?.length <= 0 || dataValue?.sale == undefined) ? "" : dataValue?.sale}
+
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Danh mục"
+                  labelAlign="left"
+                  name="cate_id"
+                  // rules={[
+                  //   {
+                  //     required: dataValue?._id == undefined ? true : false,
+                  //     message: "Bạn chưa chọn danh mục!",
+                  //   },
+                  // ]}
+                >
+                  <Select
+                    placeholder="Chọn danh mục"
+                    defaultValue={categories?.data?.find((item: any) => item._id == dataValue?._id ? dataValue?._id : '')}
+                  >
+                    {categories?.data?.map((item: any) => (
+                      <Select.Option value={item._id}>{item.name}</Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Thương hiệu"
+                  name="trademark"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required:dataValue?.trademark==undefined? true:false,
+                  //     message: "Bạn chưa chọn thương hiệu!",
+                  //   },
+                  // ]}
+
+                >
+                  <Select placeholder="Thương hiệu" key="1" defaultValue={dataValue?.trademark}>
+                    <Select.Option value="YL">YL</Select.Option>
+                    <Select.Option value="NIKE">NIKE</Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Nguồn gốc"
+                  name="origin"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required:dataValue?.origin==undefined? true:false,
+                  //     message: "Bạn chưa chọn nguồn gốc!",
+                  //   },
+                  // ]}
+                >
+                  <Select placeholder="Nguồn gốc" key="2" defaultValue={dataValue?.origin}>
+                    <Select.Option value="Châu Âu">Châu Âu</Select.Option>
+                    <Select.Option value="Việt Nam">Việt Nam</Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Kho hàng"
+                  name="warehouse"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required:dataValue?.warehouse==undefined? true:false,
+                  //     message: "Bạn chưa chọn kho hàng!",
+                  //   },
+                  // ]}
+                >
+                  <Select placeholder="Thương hiệu" key="3" defaultValue={dataValue?.warehouse}>
+                    <Select.Option value="Đoàn 123">Đoàn 123</Select.Option>
+                    <Select.Option value="Đoàn 312">Đoàn 312</Select.Option>
+                    <Select.Option value="Cháu nhỏ">Cháu nhỏ</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label="Gửi từ"
+                  name="sent_from"
+                  labelAlign="left"
+                  // rules={[
+                  //   {
+                  //     required:dataValue?.sent_from==undefined? true:false,
+                  //     message: "Bạn chưa chọn gửi từ đâu !",
+                  //   },
+                  // ]}
+                >
+                  <Select placeholder="Gửi từ" key="4" defaultValue={dataValue?.sent_from}>
+                    <Select.Option value="Thường Tín">Thường Tín</Select.Option>
+                    <Select.Option value="Hoàng Mai">Hoàng Mai</Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  wrapperCol={{
+                    offset: 22,
+                    span: 24,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit">
+                    Tiếp
+                    <RightOutlined />
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </React.Fragment>
+          :
+          <div className='pro-info'>
+            <ProInfo
+              callBack={() => setP1(1)}
+              dataValue={dataValue}
+            />
+          </div>
+
+      }
     </div>
   );
 };
 
-export default Products;
-//  import {
+export default AddProduct;
+// import {
 //   CloseCircleOutlined,
 //   EyeInvisibleOutlined,
 //   EyeOutlined,
@@ -343,8 +358,6 @@ export default Products;
 //   const navigator = useNavigate();
 //   const [nameClassify1, setNameClassify1] = useState(); //tên pl1
 //   const [nameClassify2, setNameClassify2] = useState(); //tên pl2
-//   const [nameClassifyValue1, setNameClassifyValue1] = useState<any>([]); //tên giá trị pl1
-//   const [nameClassifyValue2, setNameClassifyValue2] = useState<any>([]); //tên giá trị pl2
 
 //   const [classifyValue, setClassifyValue] = useState([]); //dữ liệu hoàn tất
 //   const [selectImage, setSelectImage] = useState<any>();
@@ -383,48 +396,23 @@ export default Products;
 //     setLoading(false);
 //   };
 
-
-//   console.log(nameClassifyValue1, 'nameClassifyValue1')
-//   const [value1, setValue1] = useState<any>([])
-//   const handleChangeValue = (values: any) => {
-//     setNameClassifyValue1(values)
-
-//   }
 //   const handleChangeValue1 = (value: any) => {
-//     if (classifyValue?.length > 0) {
-//  // @ts-ignore
-//       const newNameClassify1: any = [];
-//       // @ts-ignore
+//     console.log('first',value)
+//     // @ts-ignore
+//     const newNameClassify1: any = [];
+//     // @ts-ignore
+//     value?.map((item: any, index: any) =>
 //       newNameClassify1.push({
-//         name: value,
-//         id: value + 1,
+//         name: item,
+//         id: index + 1,
 //         values: [],
 //         quantity: 0,
 //         price: 0,
 //         status: false
 //       })
-//       setClassifyValue(newNameClassify1);
-//     } else {
-//       // @ts-ignore
-//       const newNameClassify1: any = [];
-//       // @ts-ignore
-//       newNameClassify1.push({
-//         name: value,
-//         id: value + 1,
-//         values: [],
-//         quantity: 0,
-//         price: 0,
-//         status: false
-//       })
-//       setClassifyValue(newNameClassify1);
-//     }
+//     );
+//     setClassifyValue(newNameClassify1);
 //   };
-//   console.log(classifyValue, 'classifyValue')
-//   const removeValue1 = (e: any) => {
-
-//   }
-
-
 
 //   const handleChangeValue2 = (value: any) => {
 //     const newValue: any = [];
@@ -781,13 +769,11 @@ export default Products;
 //               mode="tags"
 //               size={"middle"}
 //               placeholder="Giá trị phân loại 1"
-//               defaultValue={nameClassifyValue1}
-//               onChange={handleChangeValue}
+//               defaultValue={[]}
+//               onChange={handleChangeValue1}
 //               style={{
 //                 width: "100%",
 //               }}
-//               onSelect={(e) => handleChangeValue1(e)}
-//               onDeselect={(e) => removeValue1(e)}
 //             />
 //           </div>
 //           {comfimShowClassifyValue == true && (

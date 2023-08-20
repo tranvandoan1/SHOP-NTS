@@ -5,20 +5,38 @@
 @media (min-width:481px) and (max-width:1023px) {
 
     .header-content {
-        /* grid-template-columns: repeat(2, 1fr) !important; */
         display: flex !important;
         justify-content: space-between;
         align-items: center;
     }
-/* 
-    .header-input {
-        display: none;
-    } */
+
 
     .logo {
         width: 85px !important;
         height: 85px !important;
         transition: 350ms ease-in 0s;
+    }
+
+
+    /* ProInfo.tsx */
+    .pro-info-add {
+        display: grid;
+        grid-template-columns: 1fr !important;
+        grid-gap: 30px;
+    }
+
+    .pro-pl2 {
+        width: 20% !important;
+    }
+
+    .name-classify1>span,
+    .name-classify2>span {
+        width: 60% !important;
+    }
+
+    .classify-value1>span,
+    .classify-value2>span {
+        width: 40% !important;
     }
 }
 
@@ -38,5 +56,13 @@
         height: 70px !important;
         transition: 350ms ease-in 0s;
     }
+    /* .name-classify1>span,
+    .name-classify2>span {
+        width: 90% !important;
+    }
 
+    .classify-value1>span,
+    .classify-value2>span {
+        width: 40% !important;
+    } */
 }

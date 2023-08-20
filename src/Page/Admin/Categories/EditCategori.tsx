@@ -1,31 +1,52 @@
 // @ts-ignore
 import React, { useState } from "react";
-import { Button, Modal, Checkbox, Form, Input, Upload, Spin } from "antd";
-import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Modal, Form, Input, Upload } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { useEffect } from 'react';
+import Loading from "../../../components/Loading";
 type Props = {
   callBack: (e: any) => void;
   isModalOpen: boolean;
 };
 // @ts-ignore
-const AddCategori = ({ isModalOpen, callBack }: Props) => {
-  const [imageUrlAvatar, setImageUrlAvatar] = useState<{
-    url: any;
-    file: any;
-  }>({ url: undefined, file: undefined });
+const EditCategori: React.FC = ({ isModalOpen, callBack }: Props) => {
+  const [imageUrlAvatar, setImageUrlAvatar] = useState<{ url: any; file: any }>(
+    { url: undefined, file: undefined }
+  );
   const [form] = Form.useForm();
+  // @ts-ignore
   const [loading, setLoading] = useState<boolean>(false);
+  // @ts-ignore
+  const [name, setName] = useState<string>(isModalOpen?.data?.name);
+  useEffect(() => {
+    form.resetFields();
+
+    // @ts-ignore
+  }, [isModalOpen?.data])
   const onFinish = (values: any) => {
+    // form.resetFields();
     callBack({
       status: true,
-      data: { file: imageUrlAvatar.file, name: values.name },
+      data: {
+        file: imageUrlAvatar.file,
+        // @ts-ignore
+        name: values.name == undefined ? isModalOpen.data.name : values.name,
+      },
+    });
+    setImageUrlAvatar({ url: undefined, file: undefined });
+  };
+
+  // @ts-ignore
+  const onFinishFailed = (errorInfo: any) => {
+    callBack({
+      status: true,
+      // @ts-ignore
+      data: { file: imageUrlAvatar.file, name: isModalOpen.data.name },
     });
     setImageUrlAvatar({ url: undefined, file: undefined });
     form.resetFields();
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
-  };
   type FieldType = {
     name?: string;
   };
@@ -38,12 +59,16 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
   return (
     <>
       <Modal
-        title="Thêm danh mục sản phẩm"
-        open={isModalOpen}
+        title="Sửa danh mục sản phẩm"
+        // @ts-ignore
+        open={isModalOpen.status}
         onOk={() => callBack("ok")}
         onCancel={() => callBack("close")}
         footer={null}
       >
+        {
+          loading == true && <Loading />
+        }
         <br />
         <Form
           form={form}
@@ -58,9 +83,19 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
           <Form.Item<FieldType>
             label="Tên danh mục"
             name="name"
-            rules={[{ required: true, message: "Chưa nhập tên danh mục !" }]}
+            rules={[
+              {
+                required: name?.length <= 0 ? true : false,
+                message: "Chưa nhập tên danh mục !",
+              },
+            ]}
           >
-            <Input placeholder="Tên danh mục" />
+            <Input
+              placeholder="Tên danh mục"
+              // @ts-ignore
+              defaultValue={isModalOpen?.data?.name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Form.Item>
           <br />
           <div className="add-cate-avatar">
@@ -72,32 +107,17 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
                 beforeUpload={UploadAvatatr}
                 className="add-cate-avatar"
               >
-                {imageUrlAvatar.file ? (
-                  <div className="add-cate-box-image">
-                    <img
-                      src={imageUrlAvatar.url}
-                      className="add-cate-image"
-                    />
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      marginTop: 8,
-                    }}
-                  >
-                    {loading == true ? (
-                      <Spin />
-                    ) : (
-                      <PlusCircleOutlined
-                        style={{
-                          fontSize: 30,
-                          opacity: 0.8,
-                          color: "#ee4d2d",
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
+                <div className="add-cate-box-image">
+                  <img
+                    src={
+                      imageUrlAvatar.url == undefined
+                        // @ts-ignore
+                        ? isModalOpen?.data?.photo
+                        : imageUrlAvatar.url
+                    }
+                    className="add-cate-image"
+                  />
+                </div>
               </Upload>
               {imageUrlAvatar.file !== undefined && (
                 <div
@@ -115,7 +135,7 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
           <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
             <Button
               style={{ marginRight: 10 }}
-              onClick={() => callBack('close')}
+              onClick={() => callBack("close")}
             >
               Hủy
             </Button>
@@ -127,6 +147,6 @@ const AddCategori = ({ isModalOpen, callBack }: Props) => {
       </Modal>
     </>
   );
-}
+};
 
-export default AddCategori;
+export default EditCategori;

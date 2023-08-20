@@ -99,9 +99,14 @@ const Product = () => {
                                         className={styles["products"]}
                                         style={{ marginLeft: 10 }}
                                     >
-                                        <div className={styles["product-photo"]}>
-                                            <img src={item.image} alt="" />
-                                        </div>
+                                       <div className={styles["product-photo-box"]}>
+                                                <div className={styles["product-photo"]}>
+                                                    <img src={item.image} alt="" />
+                                                </div>
+                                                <div className={styles["product-photo1"]}>
+                                                    <img src={'https://tronhouse.com/assets/data/editor/source/meo-chup-anh-san-pham-quan-ao-de-kinh-doanh-online-hieu-qua/chup-anh-quan-ao-5.jpg'} alt="" />
+                                                </div>
+                                            </div>
                                         <span className={styles["product-sale"]}>-{item.sale}%</span>
                                         <div className={styles["product-title"]}>
                                             <span className={styles["product-name"]}>{item.name}</span>
@@ -131,8 +136,13 @@ const Product = () => {
                                             className={styles["products"]}
                                             onClick={() => nativer('/detail')}
                                         >
-                                            <div className={styles["product-photo"]}>
-                                                <img src={item.image} alt="" />
+                                            <div className={styles["product-photo-box"]}>
+                                                <div className={styles["product-photo"]}>
+                                                    <img src={item.image} alt="" />
+                                                </div>
+                                                <div className={styles["product-photo1"]}>
+                                                    <img src={'https://tronhouse.com/assets/data/editor/source/meo-chup-anh-san-pham-quan-ao-de-kinh-doanh-online-hieu-qua/chup-anh-quan-ao-5.jpg'} alt="" />
+                                                </div>
                                             </div>
                                             <span className={styles["product-sale"]}>-{item.sale}%</span>
                                             <div className={styles["product-title"]}>

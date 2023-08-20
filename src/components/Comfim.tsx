@@ -1,22 +1,23 @@
 import { Modal } from "antd";
 import "./css/comfim.css";
 type Props = {
-    btnReject: () => void;
-    btnComfim: () => void;
-    data: any;
-    title: string;
-    conent: string;
-    isModalOpen: boolean;
+    btnReject?: () => void;
+    btnComfim?: () => void;
+    title?: string;
+    conent?: string;
+    isModalOpen?: boolean;
+    okText?:string,
+    cancelText?:string
 };
 
 const Comfim = ({
     btnReject,
     btnComfim,
-    // @ts-ignore
-    data,
     title,
     conent,
     isModalOpen,
+    cancelText,
+    okText
 }: Props) => {
     const handleOk = () => {
         // setIsModalOpen(false);
@@ -33,8 +34,8 @@ const Comfim = ({
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            okText="Xác nhận"
-            cancelText="Hủy"
+            okText={okText}
+            cancelText={cancelText}
         >
             <div>
                 <h5 style={{ color: 'red' }}>{title}</h5>
